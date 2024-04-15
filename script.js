@@ -126,7 +126,7 @@ function removeItemCart(name){
 function checkRestaurantOpen() {
     const date = new Date();
     const hora = date.getHours();
-    return hora >= 19 && hora < 22;
+    return hora >= 15 && hora < 22;
 }
 
 // Atualizar a cor do indicador de status do restaurante
