@@ -155,24 +155,17 @@ addressInput.addEventListener("input", function(event){
 checkoutBtn.addEventListener("click", function(){
     const isOpen = checkRestaurantOpen();
     if(!isOpen){
-
          Toastify({
-         text: "Ops o restaurante está fechado!",
-         duration: 3000,
-    
-        
-         close: true,
-         gravity: "top", // `top` or `bottom`
-         position: "left", // `left`, `center` or `right`
-         stopOnFocus: true, // Prevents dismissing of toast on hover
-         style: {
-         background: "#ef4444",
-         },
+             text: "Ops o restaurante está fechado!",
+             duration: 3000,
+             close: true,
+             gravity: "top", // `top` or `bottom`
+             position: "left", // `left`, `center` or `right`
+             stopOnFocus: true, // Prevents dismissing of toast on hover
+             style: {
+                 background: "#ef4444",
+             },
         }).showToast();
-        
-        
-
-
         return;
     }
     if(cart.length === 0) return;
@@ -183,17 +176,19 @@ checkoutBtn.addEventListener("click", function(){
         return;
     }
 
-    //Enviar o pedido para a API do WhatsApp
-    const cartItems = cart.map((item) => {
+    let cartItemsMessage = cart.map((item) => {
         return (
-           ` ${item.name} Quatidade: (${item.quantity}) Preço: R$${item.price} |`
+            `${item.name} Quantidade: (${item.quantity}) Preço: R$${(item.price * item.quantity).toFixed(2)} |`
         )
-    }).join("")
+    }).join("");
 
-    const message = encodeURIComponent(cartItems)
-    const phone = "62993209428"
+    const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2);
 
-    window.open(`https://wa.me/${phone}?text=${message} Endereço: ${addressInput.value}`, "_blank");
+    // Aqui é onde você adiciona o código para calcular o preço total e adicioná-lo à mensagem
+    const message = encodeURIComponent(`Total: R$${totalPrice}\n${cartItemsMessage} \nEndereço: ${addressInput.value}`);
+    const phone = "62993209428";
+
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
 
     cart = [];
     updateCartModal();
